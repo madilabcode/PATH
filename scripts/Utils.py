@@ -113,7 +113,7 @@ def process_samples_imgs(samples, obj):
         
     return images_list, idexs
 
-def process_coord_obj(adata, R=50):
+def process_coord_obj_hd(adata, R=50):
     slide_iamge = []
     img = list(adata.uns["spatial"].values())[0]["images"]["hires"]
     spatial_coords = adata.obsm['spatial']
