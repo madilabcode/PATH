@@ -113,7 +113,33 @@ def process_samples_imgs(samples, obj):
         
     return images_list, idexs
 
-def get_embeddings(model, dataloader: DataLoader) -> torch.Tensor:
+def process_coord_obj(adata, R=50):
+    slide_iamge = []
+    img = list(adata.uns["spatial"].values())[0]["images"]["hires"]
+    spatial_coords = adata.obsm['spatial']
+
+    try:
+        scale_factor = list(adata.uns["spatial"].values())[0]["scalefactors"]["tissue_hires_scalef"]
+    except:
+        scale_factor = 1
+
+    scaled_coords = spatial_coords * scale_factor
+
+                
+    for idex, coord in enumerate(scaled_coords):
+        if "r" in adata.obs.columns:
+            r = adata.obs.iloc[idex]["r"]
+        else:
+            r = R
+        segment = img[int(coord[1]-r*scale_factor) :int(coord[1]+r*scale_factor), 
+                    int(coord[0]-r*scale_factor):int(coord[0]+r*scale_factor)]
+        segment = transform(segment)
+        segment = segment.unsqueeze(0)
+        slide_iamge.append(segment)
+
+    return torch.concat(slide_iamge)
+
+def get_embeddings(model, dataloader: DataLoader):
     model.eval()
     embeddings = []
     with torch.no_grad():
