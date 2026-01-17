@@ -9,6 +9,17 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(42)
 
 
+class basic_dataset(Dataset):
+    def __init__(self, images, kegg_expressions):
+        self.images = images
+        self.kegg_expressions = kegg_expressions
+    
+    def __len__(self):
+        return len(self.images)
+    
+    def __getitem__(self, idx):
+        return self.images[idx], self.kegg_expressions[idx]
+        
 
 class GeneExpressionDataset(Dataset):
     def __init__(self, gene_expression, slides):
