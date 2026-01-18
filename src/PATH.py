@@ -5,7 +5,8 @@ Supports LoRA fine-tuning of the embedding model.
 """
 
 import sys
-#sys.path.append('/home/bnet/ronsheinin/spNET/TransPath')
+sys.path.append('./TransPath')
+sys.path.append('./src')
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -15,16 +16,13 @@ import os
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from tqdm import tqdm
-import Loss as Loss
+import src.Loss as Loss
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import gc
 from scipy.stats import spearmanr
-import imp
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #DEVICE = torch.device("cpu")
-imp.reload(Loss)
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -281,7 +279,7 @@ class PATH(nn.Module):
         lora_rank: int = 8,
         lora_alpha: float = 16.0,
         freeze_backbone: bool = True,
-        model_path: str = '../TransPath/ctranspath.pth',
+        model_path: str = './TransPath/ctranspath.pth',
         classification_mode: bool = True,
         lambda_adv: float = 0.2,
         num_epochs_adv: int = 4,

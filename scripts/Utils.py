@@ -8,7 +8,7 @@ import scanpy as sc
 import torchvision.transforms as transforms
 import torch
 import os
-from Datasets import roi_dataset
+from src.Datasets import roi_dataset
 
 from tqdm import tqdm
 
@@ -139,11 +139,14 @@ def process_coord_obj_hd(adata, R=50):
 
     return torch.concat(slide_iamge)
 
-def get_embeddings(model, dataloader: DataLoader):
+def get_embeddings(model, dataloader: DataLoader, only_imgs=True):
     model.eval()
     embeddings = []
     with torch.no_grad():
         for batch in tqdm(dataloader):
+          if only_imgs:
+            images = batch.to(device).float()
+          else:
             images = batch[0].to(device).float()
-            embeddings.append(model.backbone(images).detach().cpu())
+          embeddings.append(model.backbone(images).detach().cpu())
     return torch.concat(embeddings).numpy()
