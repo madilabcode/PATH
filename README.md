@@ -58,9 +58,6 @@ PATH uses a vision transformer backbone (CTransPath) pre-trained on histopatholo
 
 ## Citation
 
-If you use PATH in your research, please cite:
-
-
 
 ## License
 
