@@ -2,6 +2,12 @@
 
 PATH is a deep learning framework that predicts pathway activation directly from H&E-stained histology images in spatial transcriptomics data. The model leverages vision transformers (CTransPath) to extract meaningful embeddings from tissue images and predicts KEGG pathway activities for each spatial spot.
 
+## Key Innovations
+
+**LoRA Fine-tuning**: PATH employs Low-Rank Adaptation (LoRA) to efficiently adapt the pre-trained CTransPath vision transformer backbone. By introducing low-rank matrices that approximate weight updates, LoRA enables effective fine-tuning with only a fraction of the parameters typically required for full fine-tuning, making the model both memory-efficient and computationally tractable for large-scale spatial transcriptomics datasets.
+
+**Adversarial Domain Adaptation**: To ensure robust pathway predictions across diverse datasets, samples, and slides, PATH incorporates a hierarchical adversarial training strategy. A confounder discriminator learns to predict dataset, sample, and slide identities from embeddings, while the main model is adversarially trained to produce embeddings that are invariant to these technical confounders. This approach improves generalization and reduces batch effects, enabling reliable pathway inference across heterogeneous data sources.
+
 ![LoRA Architecture](./figs/LORA.png)
 
 ## Features
@@ -54,7 +60,14 @@ pip install scanpy torch timm gdown pandas numpy scipy scikit-learn seaborn matp
 
 ## Model Architecture
 
-PATH uses a vision transformer backbone (CTransPath) pre-trained on histopathology images, fine-tuned with LoRA for efficient adaptation. The model extracts image embeddings and predicts pathway activities through a KEGG pathway head, enabling spatial inference of biological pathway activation patterns.
+PATH uses a vision transformer backbone (CTransPath) pre-trained on histopathology images, fine-tuned with LoRA for efficient parameter-efficient adaptation. The model architecture consists of:
+
+- **Vision Transformer Backbone**: CTransPath extracts rich image embeddings from H&E tissue patches
+- **LoRA Adaptation**: Low-rank matrices are applied to linear layers, enabling efficient fine-tuning with minimal parameter overhead
+- **KEGG Pathway Head**: Predicts pathway activation scores for each spatial spot
+- **Hierarchical Adversarial Discriminator**: Trains embeddings to be invariant to dataset, sample, and slide-level confounders through adversarial learning
+
+This architecture enables robust spatial inference of biological pathway activation patterns while maintaining computational efficiency and cross-dataset generalization.
 
 ## Citation
 
