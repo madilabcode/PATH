@@ -3,6 +3,9 @@ import pandas as pd
 import gseapy as gp
 from tqdm import tqdm
 import warnings
+import sys
+sys.path.append('./TransPath')
+sys.path.append('./src')
 from typing import List, Optional
 from scipy.stats import rankdata, norm
 
